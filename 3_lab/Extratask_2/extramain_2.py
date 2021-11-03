@@ -5,22 +5,22 @@ import re
 
 def find_words(filename):
     file_to_check = open(filename)
-    test_text = re.sub('\W+', ' ', file_to_check.read()).split()
-    final_words = []
-    for word in test_text:
-        letter = re.search('[ауоиэыеёяюАУОИЭЫЕЁЯЮ]', word)
-        flag = True
-        if re.match('[А-ЯЁа-яё]*$', word):
-            for checker in re.findall('[ауоиэыеёяюАУОИЭЫЕЁЯЮ]', word):
-                if checker != letter[0]:
-                    flag = False
-            if flag:
-                final_words.append(word)
-    return sorted(final_words, key=len)
+    test_text = file_to_check.read()
+    final_words = re.findall(r'\b([йцкнгшщзхъфвпрлджчсмтьб]*([ауоиэыеёяю])[йцкнгшщзхъфвпрлджчсмтьб]*((\2){1,}[йцкнгшщзхъфвпрлджчсмтьб]*)*)\b', test_text)
+#    print(final_words)
+    final = []
+    for i in final_words:
+        final.append(i[0])
+    return sorted(final, key=len)
 
 
 for i in range(1, 6):
     string_name = 'string_' + str(i) + '.txt'
+    words_list = find_words(string_name)
     print('Тест ' + str(i))
-    print(*find_words(string_name), sep='\n')
-    print()
+    if len(words_list) != 0:
+        print(*words_list, sep='\n')
+        print()
+    else:
+        print("Нет подходящих слов")
+        print()
